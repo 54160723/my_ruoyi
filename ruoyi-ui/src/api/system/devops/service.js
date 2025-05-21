@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询DevOps服务列表
+// 查询服务配置列表
 export function listService(query) {
   return request({
     url: '/system/devops/service/list',
@@ -9,7 +9,7 @@ export function listService(query) {
   })
 }
 
-// 查询DevOps服务详细
+// 查询服务配置详细
 export function getService(serviceId) {
   return request({
     url: '/system/devops/service/' + serviceId,
@@ -17,7 +17,7 @@ export function getService(serviceId) {
   })
 }
 
-// 新增DevOps服务
+// 新增服务配置
 export function addService(data) {
   return request({
     url: '/system/devops/service',
@@ -26,7 +26,7 @@ export function addService(data) {
   })
 }
 
-// 修改DevOps服务
+// 修改服务配置
 export function updateService(data) {
   return request({
     url: '/system/devops/service',
@@ -35,7 +35,7 @@ export function updateService(data) {
   })
 }
 
-// 删除DevOps服务
+// 删除服务配置
 export function delService(serviceId) {
   return request({
     url: '/system/devops/service/' + serviceId,
@@ -43,7 +43,7 @@ export function delService(serviceId) {
   })
 }
 
-// 导出DevOps服务
+// 导出服务配置
 export function exportService(query) {
   return request({
     url: '/system/devops/service/export',

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DevopsJenkinsMapper">
+    
+    <resultMap type="DevopsJenkins" id="DevopsJenkinsResult">
+        <result property="jenkinsId"    column="jenkins_id"    />
+        <result property="jenkinsName"    column="jenkins_name"    />
+        <result property="jenkinsUrl"    column="jenkins_url"    />
+        <result property="jenkinsUser"    column="jenkins_user"    />
+        <result property="jenkinsToken"    column="jenkins_token"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectDevopsJenkinsVo">
+        select jenkins_id, jenkins_name, jenkins_url, jenkins_user, jenkins_token, status, create_by, create_time, update_by, update_time, remark from devops_jenkins
+    </sql>
+
+    <select id="selectDevopsJenkinsList" parameterType="DevopsJenkins" resultMap="DevopsJenkinsResult">
+        <include refid="selectDevopsJenkinsVo"/>
+        <where>  
+            <if test="jenkinsName != null  and jenkinsName != ''"> and jenkins_name like concat('%', #{jenkinsName}, '%')</if>
+            <if test="jenkinsUrl != null  and jenkinsUrl != ''"> and jenkins_url = #{jenkinsUrl}</if>
+            <if test="jenkinsUser != null  and jenkinsUser != ''"> and jenkins_user = #{jenkinsUser}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectDevopsJenkinsByJenkinsId" parameterType="Long" resultMap="DevopsJenkinsResult">
+        <include refid="selectDevopsJenkinsVo"/>
+        where jenkins_id = #{jenkinsId}
+    </select>
+        
+    <insert id="insertDevopsJenkins" parameterType="DevopsJenkins" useGeneratedKeys="true" keyProperty="jenkinsId">
+        insert into devops_jenkins
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="jenkinsName != null">jenkins_name,</if>
+            <if test="jenkinsUrl != null">jenkins_url,</if>
+            <if test="jenkinsUser != null">jenkins_user,</if>
+            <if test="jenkinsToken != null">jenkins_token,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="jenkinsName != null">#{jenkinsName},</if>
+            <if test="jenkinsUrl != null">#{jenkinsUrl},</if>
+            <if test="jenkinsUser != null">#{jenkinsUser},</if>
+            <if test="jenkinsToken != null">#{jenkinsToken},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDevopsJenkins" parameterType="DevopsJenkins">
+        update devops_jenkins
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="jenkinsName != null">jenkins_name = #{jenkinsName},</if>
+            <if test="jenkinsUrl != null">jenkins_url = #{jenkinsUrl},</if>
+            <if test="jenkinsUser != null">jenkins_user = #{jenkinsUser},</if>
+            <if test="jenkinsToken != null">jenkins_token = #{jenkinsToken},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where jenkins_id = #{jenkinsId}
+    </update>
+
+    <delete id="deleteDevopsJenkinsByJenkinsId" parameterType="Long">
+        delete from devops_jenkins where jenkins_id = #{jenkinsId}
+    </delete>
+
+    <delete id="deleteDevopsJenkinsByJenkinsIds" parameterType="String">
+        delete from devops_jenkins where jenkins_id in 
+        <foreach item="jenkinsId" collection="array" open="(" separator="," close=")">
+            #{jenkinsId}
+        </foreach>
+    </delete>
+</mapper> 

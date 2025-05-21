@@ -96,3 +96,52 @@ values('任务配置删除', @taskId, '4',  '#', '', 1, 0, 'F', '0', '0', 'syste
 
 insert into sys_menu (menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
 values('任务配置导出', @taskId, '5',  '#', '', 1, 0, 'F', '0', '0', 'system:devops:task:export',       '#', 'admin', sysdate(), '', null, '');
+
+-- Jenkins配置菜单
+insert into sys_menu (menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('Jenkins配置', @devopsId, '5', 'jenkins', 'system/devops/jenkins/index', 1, 0, 'C', '0', '0', 'system:devops:jenkins:list', 'el-icon-s-platform', 'admin', sysdate(), '', null, 'Jenkins配置菜单');
+
+-- 获取Jenkins配置菜单ID
+SELECT @jenkinsId := LAST_INSERT_ID();
+
+-- Jenkins配置按钮
+insert into sys_menu (menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('Jenkins配置查询', @jenkinsId, '1',  '#', '', 1, 0, 'F', '0', '0', 'system:devops:jenkins:query',        '#', 'admin', sysdate(), '', null, '');
+
+insert into sys_menu (menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('Jenkins配置新增', @jenkinsId, '2',  '#', '', 1, 0, 'F', '0', '0', 'system:devops:jenkins:add',          '#', 'admin', sysdate(), '', null, '');
+
+insert into sys_menu (menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('Jenkins配置修改', @jenkinsId, '3',  '#', '', 1, 0, 'F', '0', '0', 'system:devops:jenkins:edit',         '#', 'admin', sysdate(), '', null, '');
+
+insert into sys_menu (menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('Jenkins配置删除', @jenkinsId, '4',  '#', '', 1, 0, 'F', '0', '0', 'system:devops:jenkins:remove',       '#', 'admin', sysdate(), '', null, '');
+
+insert into sys_menu (menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('Jenkins配置导出', @jenkinsId, '5',  '#', '', 1, 0, 'F', '0', '0', 'system:devops:jenkins:export',       '#', 'admin', sysdate(), '', null, '');
+
+-- 流水线配置菜单
+insert into sys_menu (menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('流水线配置', @devopsId, '6', 'pipeline', 'system/devops/pipeline/index', 1, 0, 'C', '0', '0', 'system:devops:pipeline:list', 'el-icon-s-operation', 'admin', sysdate(), '', null, '流水线配置菜单');
+
+-- 获取流水线配置菜单ID
+SELECT @pipelineId := LAST_INSERT_ID();
+
+-- 流水线配置按钮
+insert into sys_menu (menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('流水线配置查询', @pipelineId, '1',  '#', '', 1, 0, 'F', '0', '0', 'system:devops:pipeline:query',        '#', 'admin', sysdate(), '', null, '');
+
+insert into sys_menu (menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('流水线配置新增', @pipelineId, '2',  '#', '', 1, 0, 'F', '0', '0', 'system:devops:pipeline:add',          '#', 'admin', sysdate(), '', null, '');
+
+insert into sys_menu (menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('流水线配置修改', @pipelineId, '3',  '#', '', 1, 0, 'F', '0', '0', 'system:devops:pipeline:edit',         '#', 'admin', sysdate(), '', null, '');
+
+insert into sys_menu (menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('流水线配置删除', @pipelineId, '4',  '#', '', 1, 0, 'F', '0', '0', 'system:devops:pipeline:remove',       '#', 'admin', sysdate(), '', null, '');
+
+insert into sys_menu (menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('流水线配置导出', @pipelineId, '5',  '#', '', 1, 0, 'F', '0', '0', 'system:devops:pipeline:export',       '#', 'admin', sysdate(), '', null, '');
+
+insert into sys_menu (menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('流水线执行', @pipelineId, '6',  '#', '', 1, 0, 'F', '0', '0', 'system:devops:pipeline:execute',       '#', 'admin', sysdate(), '', null, '');
