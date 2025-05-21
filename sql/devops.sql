@@ -48,4 +48,30 @@ CREATE TABLE `devops_service` (
 -- ----------------------------
 -- 初始化-DevOps服务表数据
 -- ----------------------------
-INSERT INTO `devops_service` VALUES (1, 1, '示例服务', 'SAMPLE-SERVICE', 'main', 'Maven', 'mvn clean package', 'Dockerfile', 'admin', sysdate(), '', null, '示例服务'); 
+INSERT INTO `devops_service` VALUES (1, 1, '示例服务', 'SAMPLE-SERVICE', 'main', 'Maven', 'mvn clean package', 'Dockerfile', 'admin', sysdate(), '', null, '示例服务');
+
+-- 环境管理表
+DROP TABLE IF EXISTS devops_environment;
+CREATE TABLE devops_environment (
+  env_id           BIGINT(20)      NOT NULL AUTO_INCREMENT    COMMENT '环境ID',
+  env_name         VARCHAR(50)     NOT NULL                   COMMENT '环境名称',
+  env_key          VARCHAR(50)     NOT NULL                   COMMENT '环境标识',
+  env_type         CHAR(1)         NOT NULL                   COMMENT '环境类型（1开发 2测试 3预发 4生产）',
+  jenkins_url      VARCHAR(255)    NOT NULL                   COMMENT 'Jenkins地址',
+  jenkins_user     VARCHAR(50)     NOT NULL                   COMMENT 'Jenkins用户名',
+  jenkins_token    VARCHAR(100)    NOT NULL                   COMMENT 'Jenkins Token',
+  docker_registry  VARCHAR(255)    NOT NULL                   COMMENT 'Docker仓库地址',
+  docker_user      VARCHAR(50)     NOT NULL                   COMMENT 'Docker用户名',
+  docker_password  VARCHAR(100)    NOT NULL                   COMMENT 'Docker密码',
+  status           CHAR(1)         DEFAULT '0'                COMMENT '状态（0正常 1停用）',
+  create_by        VARCHAR(64)     DEFAULT ''                 COMMENT '创建者',
+  create_time      DATETIME                                   COMMENT '创建时间',
+  update_by        VARCHAR(64)     DEFAULT ''                 COMMENT '更新者',
+  update_time      DATETIME                                   COMMENT '更新时间',
+  remark           VARCHAR(500)    DEFAULT NULL               COMMENT '备注',
+  PRIMARY KEY (env_id)
+) ENGINE=InnoDB AUTO_INCREMENT=100 COMMENT='环境管理表';
+
+-- 初始化-环境管理表数据
+INSERT INTO devops_environment VALUES(1, '开发环境', 'dev', '1', 'http://jenkins-dev.example.com', 'jenkins', 'dev-token', 'registry-dev.example.com', 'docker', 'dev-password', '0', 'admin', sysdate(), '', null, '开发环境配置');
+INSERT INTO devops_environment VALUES(2, '测试环境', 'test', '2', 'http://jenkins-test.example.com', 'jenkins', 'test-token', 'registry-test.example.com', 'docker', 'test-password', '0', 'admin', sysdate(), '', null, '测试环境配置'); 

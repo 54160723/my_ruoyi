@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DevopsEnvironmentMapper">
+    
+    <resultMap type="DevopsEnvironment" id="DevopsEnvironmentResult">
+        <result property="envId"           column="env_id"           />
+        <result property="envName"         column="env_name"         />
+        <result property="envKey"          column="env_key"          />
+        <result property="envType"         column="env_type"         />
+        <result property="jenkinsUrl"      column="jenkins_url"      />
+        <result property="jenkinsUser"     column="jenkins_user"     />
+        <result property="jenkinsToken"    column="jenkins_token"    />
+        <result property="dockerRegistry"  column="docker_registry"  />
+        <result property="dockerUser"      column="docker_user"      />
+        <result property="dockerPassword"  column="docker_password"  />
+        <result property="status"          column="status"           />
+        <result property="createBy"        column="create_by"        />
+        <result property="createTime"      column="create_time"      />
+        <result property="updateBy"        column="update_by"        />
+        <result property="updateTime"      column="update_time"      />
+        <result property="remark"          column="remark"           />
+    </resultMap>
+
+    <sql id="selectDevopsEnvironmentVo">
+        select env_id, env_name, env_key, env_type, jenkins_url, jenkins_user, jenkins_token, docker_registry, docker_user, docker_password, status, create_by, create_time, update_by, update_time, remark
+        from devops_environment
+    </sql>
+
+    <select id="selectDevopsEnvironmentList" parameterType="DevopsEnvironment" resultMap="DevopsEnvironmentResult">
+        <include refid="selectDevopsEnvironmentVo"/>
+        <where>  
+            <if test="envName != null  and envName != ''"> and env_name like concat('%', #{envName}, '%')</if>
+            <if test="envKey != null  and envKey != ''"> and env_key = #{envKey}</if>
+            <if test="envType != null  and envType != ''"> and env_type = #{envType}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectDevopsEnvironmentByEnvId" parameterType="Long" resultMap="DevopsEnvironmentResult">
+        <include refid="selectDevopsEnvironmentVo"/>
+        where env_id = #{envId}
+    </select>
+        
+    <insert id="insertDevopsEnvironment" parameterType="DevopsEnvironment" useGeneratedKeys="true" keyProperty="envId">
+        insert into devops_environment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="envName != null">env_name,</if>
+            <if test="envKey != null">env_key,</if>
+            <if test="envType != null">env_type,</if>
+            <if test="jenkinsUrl != null">jenkins_url,</if>
+            <if test="jenkinsUser != null">jenkins_user,</if>
+            <if test="jenkinsToken != null">jenkins_token,</if>
+            <if test="dockerRegistry != null">docker_registry,</if>
+            <if test="dockerUser != null">docker_user,</if>
+            <if test="dockerPassword != null">docker_password,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="envName != null">#{envName},</if>
+            <if test="envKey != null">#{envKey},</if>
+            <if test="envType != null">#{envType},</if>
+            <if test="jenkinsUrl != null">#{jenkinsUrl},</if>
+            <if test="jenkinsUser != null">#{jenkinsUser},</if>
+            <if test="jenkinsToken != null">#{jenkinsToken},</if>
+            <if test="dockerRegistry != null">#{dockerRegistry},</if>
+            <if test="dockerUser != null">#{dockerUser},</if>
+            <if test="dockerPassword != null">#{dockerPassword},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDevopsEnvironment" parameterType="DevopsEnvironment">
+        update devops_environment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="envName != null">env_name = #{envName},</if>
+            <if test="envKey != null">env_key = #{envKey},</if>
+            <if test="envType != null">env_type = #{envType},</if>
+            <if test="jenkinsUrl != null">jenkins_url = #{jenkinsUrl},</if>
+            <if test="jenkinsUser != null">jenkins_user = #{jenkinsUser},</if>
+            <if test="jenkinsToken != null">jenkins_token = #{jenkinsToken},</if>
+            <if test="dockerRegistry != null">docker_registry = #{dockerRegistry},</if>
+            <if test="dockerUser != null">docker_user = #{dockerUser},</if>
+            <if test="dockerPassword != null">docker_password = #{dockerPassword},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where env_id = #{envId}
+    </update>
+
+    <delete id="deleteDevopsEnvironmentByEnvId" parameterType="Long">
+        delete from devops_environment where env_id = #{envId}
+    </delete>
+
+    <delete id="deleteDevopsEnvironmentByEnvIds" parameterType="String">
+        delete from devops_environment where env_id in 
+        <foreach item="envId" collection="array" open="(" separator="," close=")">
+            #{envId}
+        </foreach>
+    </delete>
+</mapper> 
