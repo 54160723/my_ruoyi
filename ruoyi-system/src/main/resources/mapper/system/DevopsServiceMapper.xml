@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DevopsServiceMapper">
+    
+    <resultMap type="DevopsService" id="DevopsServiceResult">
+        <result property="serviceId"    column="service_id"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="serviceName"  column="service_name"  />
+        <result property="serviceKey"   column="service_key"   />
+        <result property="gitBranch"    column="git_branch"    />
+        <result property="buildType"    column="build_type"    />
+        <result property="buildCommand" column="build_command" />
+        <result property="dockerfilePath" column="dockerfile_path" />
+        <result property="createBy"     column="create_by"     />
+        <result property="createTime"   column="create_time"   />
+        <result property="updateBy"     column="update_by"     />
+        <result property="updateTime"   column="update_time"   />
+        <result property="remark"       column="remark"        />
+        <result property="projectName"  column="project_name"  />
+    </resultMap>
+
+    <sql id="selectDevopsServiceVo">
+        select s.service_id, s.project_id, s.service_name, s.service_key, s.git_branch, s.build_type, s.build_command, s.dockerfile_path, s.create_by, s.create_time, s.update_by, s.update_time, s.remark,
+        p.project_name
+        from devops_service s
+        left join devops_project p on p.project_id = s.project_id
+    </sql>
+
+    <select id="selectDevopsServiceList" parameterType="DevopsService" resultMap="DevopsServiceResult">
+        <include refid="selectDevopsServiceVo"/>
+        <where>  
+            <if test="projectId != null "> and s.project_id = #{projectId}</if>
+            <if test="serviceName != null  and serviceName != ''"> and s.service_name like concat('%', #{serviceName}, '%')</if>
+            <if test="serviceKey != null  and serviceKey != ''"> and s.service_key = #{serviceKey}</if>
+            <if test="gitBranch != null  and gitBranch != ''"> and s.git_branch = #{gitBranch}</if>
+            <if test="buildType != null  and buildType != ''"> and s.build_type = #{buildType}</if>
+        </where>
+    </select>
+    
+    <select id="selectDevopsServiceByServiceId" parameterType="Long" resultMap="DevopsServiceResult">
+        <include refid="selectDevopsServiceVo"/>
+        where s.service_id = #{serviceId}
+    </select>
+        
+    <insert id="insertDevopsService" parameterType="DevopsService" useGeneratedKeys="true" keyProperty="serviceId">
+        insert into devops_service
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="serviceName != null">service_name,</if>
+            <if test="serviceKey != null">service_key,</if>
+            <if test="gitBranch != null">git_branch,</if>
+            <if test="buildType != null">build_type,</if>
+            <if test="buildCommand != null">build_command,</if>
+            <if test="dockerfilePath != null">dockerfile_path,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="serviceName != null">#{serviceName},</if>
+            <if test="serviceKey != null">#{serviceKey},</if>
+            <if test="gitBranch != null">#{gitBranch},</if>
+            <if test="buildType != null">#{buildType},</if>
+            <if test="buildCommand != null">#{buildCommand},</if>
+            <if test="dockerfilePath != null">#{dockerfilePath},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDevopsService" parameterType="DevopsService">
+        update devops_service
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="serviceName != null">service_name = #{serviceName},</if>
+            <if test="serviceKey != null">service_key = #{serviceKey},</if>
+            <if test="gitBranch != null">git_branch = #{gitBranch},</if>
+            <if test="buildType != null">build_type = #{buildType},</if>
+            <if test="buildCommand != null">build_command = #{buildCommand},</if>
+            <if test="dockerfilePath != null">dockerfile_path = #{dockerfilePath},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where service_id = #{serviceId}
+    </update>
+
+    <delete id="deleteDevopsServiceByServiceId" parameterType="Long">
+        delete from devops_service where service_id = #{serviceId}
+    </delete>
+
+    <delete id="deleteDevopsServiceByServiceIds" parameterType="String">
+        delete from devops_service where service_id in 
+        <foreach item="serviceId" collection="array" open="(" separator="," close=")">
+            #{serviceId}
+        </foreach>
+    </delete>
+</mapper> 

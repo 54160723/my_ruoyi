@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DevopsProjectMapper">
+    
+    <resultMap type="DevopsProject" id="DevopsProjectResult">
+        <result property="projectId"    column="project_id"    />
+        <result property="projectName"  column="project_name"  />
+        <result property="projectKey"   column="project_key"   />
+        <result property="description"  column="description"   />
+        <result property="gitUrl"       column="git_url"       />
+        <result property="createBy"     column="create_by"     />
+        <result property="createTime"   column="create_time"   />
+        <result property="updateBy"     column="update_by"     />
+        <result property="updateTime"   column="update_time"   />
+        <result property="remark"       column="remark"        />
+    </resultMap>
+
+    <sql id="selectDevopsProjectVo">
+        select project_id, project_name, project_key, description, git_url, create_by, create_time, update_by, update_time, remark
+        from devops_project
+    </sql>
+
+    <select id="selectDevopsProjectList" parameterType="DevopsProject" resultMap="DevopsProjectResult">
+        <include refid="selectDevopsProjectVo"/>
+        <where>  
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="projectKey != null  and projectKey != ''"> and project_key = #{projectKey}</if>
+            <if test="gitUrl != null  and gitUrl != ''"> and git_url = #{gitUrl}</if>
+        </where>
+    </select>
+    
+    <select id="selectDevopsProjectByProjectId" parameterType="Long" resultMap="DevopsProjectResult">
+        <include refid="selectDevopsProjectVo"/>
+        where project_id = #{projectId}
+    </select>
+        
+    <insert id="insertDevopsProject" parameterType="DevopsProject" useGeneratedKeys="true" keyProperty="projectId">
+        insert into devops_project
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectName != null">project_name,</if>
+            <if test="projectKey != null">project_key,</if>
+            <if test="description != null">description,</if>
+            <if test="gitUrl != null">git_url,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectName != null">#{projectName},</if>
+            <if test="projectKey != null">#{projectKey},</if>
+            <if test="description != null">#{description},</if>
+            <if test="gitUrl != null">#{gitUrl},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDevopsProject" parameterType="DevopsProject">
+        update devops_project
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="projectKey != null">project_key = #{projectKey},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="gitUrl != null">git_url = #{gitUrl},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where project_id = #{projectId}
+    </update>
+
+    <delete id="deleteDevopsProjectByProjectId" parameterType="Long">
+        delete from devops_project where project_id = #{projectId}
+    </delete>
+
+    <delete id="deleteDevopsProjectByProjectIds" parameterType="String">
+        delete from devops_project where project_id in 
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </delete>
+</mapper> 
