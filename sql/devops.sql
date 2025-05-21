@@ -74,4 +74,31 @@ CREATE TABLE devops_environment (
 
 -- 初始化-环境管理表数据
 INSERT INTO devops_environment VALUES(1, '开发环境', 'dev', '1', 'http://jenkins-dev.example.com', 'jenkins', 'dev-token', 'registry-dev.example.com', 'docker', 'dev-password', '0', 'admin', sysdate(), '', null, '开发环境配置');
-INSERT INTO devops_environment VALUES(2, '测试环境', 'test', '2', 'http://jenkins-test.example.com', 'jenkins', 'test-token', 'registry-test.example.com', 'docker', 'test-password', '0', 'admin', sysdate(), '', null, '测试环境配置'); 
+INSERT INTO devops_environment VALUES(2, '测试环境', 'test', '2', 'http://jenkins-test.example.com', 'jenkins', 'test-token', 'registry-test.example.com', 'docker', 'test-password', '0', 'admin', sysdate(), '', null, '测试环境配置');
+
+-- 任务配置表
+DROP TABLE IF EXISTS devops_task;
+CREATE TABLE devops_task (
+  task_id           BIGINT(20)      NOT NULL AUTO_INCREMENT    COMMENT '任务ID',
+  service_id        BIGINT(20)      NOT NULL                   COMMENT '服务ID',
+  task_name         VARCHAR(50)     NOT NULL                   COMMENT '任务名称',
+  task_type         VARCHAR(20)     NOT NULL                   COMMENT '任务类型（SHELL_SCRIPT、PYTHON_SCRIPT、DOCKER_BUILD）',
+  task_params       TEXT            NOT NULL                   COMMENT '任务参数（JSON格式）',
+  work_dir          VARCHAR(255)                               COMMENT '工作目录',
+  task_order        INT(4)           NOT NULL                   COMMENT '任务顺序',
+  status            CHAR(1)         DEFAULT '0'                COMMENT '状态（0正常 1停用）',
+  create_by         VARCHAR(64)     DEFAULT ''                 COMMENT '创建者',
+  create_time       DATETIME                                   COMMENT '创建时间',
+  update_by         VARCHAR(64)     DEFAULT ''                 COMMENT '更新者',
+  update_time       DATETIME                                   COMMENT '更新时间',
+  remark            VARCHAR(500)    DEFAULT NULL               COMMENT '备注',
+  PRIMARY KEY (task_id)
+) ENGINE=InnoDB AUTO_INCREMENT=100 COMMENT='任务配置表';
+
+-- 添加外键约束
+ALTER TABLE devops_task ADD CONSTRAINT fk_task_service FOREIGN KEY (service_id) REFERENCES devops_service (service_id) ON DELETE CASCADE;
+
+-- 初始化-任务配置表数据
+INSERT INTO devops_task VALUES(1, 1, '代码编译', 'SHELL_SCRIPT', '{"script": "mvn clean package -DskipTests"}', '/app', 1, '0', 'admin', sysdate(), '', null, 'Maven编译');
+INSERT INTO devops_task VALUES(2, 1, '单元测试', 'SHELL_SCRIPT', '{"script": "mvn test"}', '/app', 2, '0', 'admin', sysdate(), '', null, '运行单元测试');
+INSERT INTO devops_task VALUES(3, 1, '构建Docker镜像', 'DOCKER_BUILD', '{"dockerfile": "Dockerfile", "context": ".", "image": "myapp", "tag": "latest"}', '/app', 3, '0', 'admin', sysdate(), '', null, '构建Docker镜像'); 

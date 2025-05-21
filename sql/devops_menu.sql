@@ -73,3 +73,26 @@ values('环境管理删除', @envId, '4',  '#', '', 1, 0, 'F', '0', '0', 'system
 
 insert into sys_menu (menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
 values('环境管理导出', @envId, '5',  '#', '', 1, 0, 'F', '0', '0', 'system:devops:environment:export',       '#', 'admin', sysdate(), '', null, '');
+
+-- 任务配置菜单
+insert into sys_menu (menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('任务配置', @devopsId, '4', 'task', 'system/devops/task/index', 1, 0, 'C', '0', '0', 'system:devops:task:list', 'el-icon-s-order', 'admin', sysdate(), '', null, '任务配置菜单');
+
+-- 获取任务配置菜单ID
+SELECT @taskId := LAST_INSERT_ID();
+
+-- 任务配置按钮
+insert into sys_menu (menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('任务配置查询', @taskId, '1',  '#', '', 1, 0, 'F', '0', '0', 'system:devops:task:query',        '#', 'admin', sysdate(), '', null, '');
+
+insert into sys_menu (menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('任务配置新增', @taskId, '2',  '#', '', 1, 0, 'F', '0', '0', 'system:devops:task:add',          '#', 'admin', sysdate(), '', null, '');
+
+insert into sys_menu (menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('任务配置修改', @taskId, '3',  '#', '', 1, 0, 'F', '0', '0', 'system:devops:task:edit',         '#', 'admin', sysdate(), '', null, '');
+
+insert into sys_menu (menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('任务配置删除', @taskId, '4',  '#', '', 1, 0, 'F', '0', '0', 'system:devops:task:remove',       '#', 'admin', sysdate(), '', null, '');
+
+insert into sys_menu (menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+values('任务配置导出', @taskId, '5',  '#', '', 1, 0, 'F', '0', '0', 'system:devops:task:export',       '#', 'admin', sysdate(), '', null, '');
