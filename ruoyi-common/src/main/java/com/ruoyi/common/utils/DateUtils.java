@@ -188,4 +188,31 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
         ZonedDateTime zdt = localDateTime.atZone(ZoneId.systemDefault());
         return Date.from(zdt.toInstant());
     }
+
+    /**
+     * 获取时间戳（毫秒）
+     *
+     * @param date 日期对象
+     * @return 时间戳
+     */
+    public static long getTimeInMillis(Date date) {
+        if (date == null) {
+            return 0;
+        }
+        return date.getTime();
+    }
+
+    /**
+     * 获取时间戳（毫秒）
+     * 
+     * @param dateStr 日期字符串
+     * @return 时间戳
+     */
+    public static long getTimeInMillis(String dateStr) {
+        try {
+            return parseDate(dateStr).getTime();
+        } catch (Exception e) {
+            return 0;
+        }
+    }
 }

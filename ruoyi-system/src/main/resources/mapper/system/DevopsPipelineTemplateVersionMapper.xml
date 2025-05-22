@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DevopsPipelineTemplateVersionMapper">
+    
+    <resultMap type="DevopsPipelineTemplateVersion" id="DevopsPipelineTemplateVersionResult">
+        <result property="versionId"       column="version_id"      />
+        <result property="templateId"      column="template_id"     />
+        <result property="versionNumber"   column="version_number"  />
+        <result property="templateContent" column="template_content"/>
+        <result property="parameters"    column="parameters"    />
+        <result property="createBy"        column="create_by"       />
+        <result property="createTime"      column="create_time"     />
+        <result property="remark"          column="remark"          />
+    </resultMap>
+
+    <sql id="selectDevopsPipelineTemplateVersionVo">
+        select version_id, template_id, version_number, template_content, parameters, create_by, create_time, remark
+        from devops_pipeline_template_version
+    </sql>
+
+    <select id="selectDevopsPipelineTemplateVersionList" parameterType="DevopsPipelineTemplateVersion" resultMap="DevopsPipelineTemplateVersionResult">
+        <include refid="selectDevopsPipelineTemplateVersionVo"/>
+        <where>  
+            <if test="templateId != null "> and template_id = #{templateId}</if>
+            <if test="versionNumber != null  and versionNumber != ''"> and version_number like concat('%', #{versionNumber}, '%')</if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectDevopsPipelineTemplateVersionByVersionId" parameterType="Long" resultMap="DevopsPipelineTemplateVersionResult">
+        <include refid="selectDevopsPipelineTemplateVersionVo"/>
+        where version_id = #{versionId}
+    </select>
+        
+    <insert id="insertDevopsPipelineTemplateVersion" parameterType="DevopsPipelineTemplateVersion" useGeneratedKeys="true" keyProperty="versionId">
+        insert into devops_pipeline_template_version
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="templateId != null">template_id,</if>
+            <if test="versionNumber != null">version_number,</if>
+            <if test="templateContent != null">template_content,</if>
+            <if test="parameters != null">parameters,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="templateId != null">#{templateId},</if>
+            <if test="versionNumber != null">#{versionNumber},</if>
+            <if test="templateContent != null">#{templateContent},</if>
+            <if test="parameters != null">#{parameters},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDevopsPipelineTemplateVersion" parameterType="DevopsPipelineTemplateVersion">
+        update devops_pipeline_template_version
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="templateId != null">template_id = #{templateId},</if>
+            <if test="versionNumber != null">version_number = #{versionNumber},</if>
+            <if test="templateContent != null">template_content = #{templateContent},</if>
+            <if test="parameters != null">parameters = #{parameters},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where version_id = #{versionId}
+    </update>
+
+    <delete id="deleteDevopsPipelineTemplateVersionByVersionId" parameterType="Long">
+        delete from devops_pipeline_template_version where version_id = #{versionId}
+    </delete>
+
+    <delete id="deleteDevopsPipelineTemplateVersionByVersionIds" parameterType="String">
+        delete from devops_pipeline_template_version where version_id in 
+        <foreach item="versionId" collection="array" open="(" separator="," close=")">
+            #{versionId}
+        </foreach>
+    </delete>
+
+    <select id="selectLatestDevopsPipelineTemplateVersionByTemplateId" parameterType="Long" resultMap="DevopsPipelineTemplateVersionResult">
+        <include refid="selectDevopsPipelineTemplateVersionVo"/>
+        where template_id = #{templateId}
+        order by create_time desc
+        limit 1
+    </select>
+</mapper> 

@@ -1,7 +1,9 @@
 package com.ruoyi.system.service;
 
 import java.util.List;
+import java.util.Map;
 import com.ruoyi.system.domain.DevopsPipeline;
+import com.ruoyi.system.domain.DevopsPipelineHistory;
 
 /**
  * 流水线配置Service接口
@@ -65,4 +67,36 @@ public interface IDevopsPipelineService
      * @return 结果
      */
     public boolean executePipeline(Long pipelineId);
+
+    /**
+     * 触发流水线执行
+     * 
+     * @param pipelineId 流水线ID
+     * @return 结果
+     */
+    public int triggerPipeline(Long pipelineId);
+
+    /**
+     * 查询流水线执行历史列表
+     * 
+     * @param history 查询条件
+     * @return 历史记录列表
+     */
+    public List<DevopsPipelineHistory> selectPipelineHistoryList(DevopsPipelineHistory history);
+
+    /**
+     * 获取构建日志
+     * 
+     * @param historyId 历史记录ID
+     * @return 构建日志
+     */
+    public String getBuildLog(Long historyId);
+
+    /**
+     * 刷新构建状态
+     * 
+     * @param historyId 历史记录ID
+     * @return 结果
+     */
+    public int refreshBuildStatus(Long historyId);
 } 

@@ -47,7 +47,7 @@ export function delPipeline(pipelineId) {
 export function exportPipeline(query) {
   return request({
     url: '/system/devops/pipeline/export',
-    method: 'post',
+    method: 'get',
     params: query
   })
 }
@@ -56,6 +56,31 @@ export function exportPipeline(query) {
 export function executePipeline(pipelineId) {
   return request({
     url: '/system/devops/pipeline/execute/' + pipelineId,
+    method: 'put'
+  })
+}
+
+// 查询流水线执行历史
+export function getPipelineHistory(query) {
+  return request({
+    url: '/system/devops/pipeline/history',
+    method: 'get',
+    params: query
+  })
+}
+
+// 获取构建日志
+export function getBuildLog(historyId) {
+  return request({
+    url: '/system/devops/pipeline/log/' + historyId,
+    method: 'get'
+  })
+}
+
+// 刷新构建状态
+export function refreshBuildStatus(historyId) {
+  return request({
+    url: '/system/devops/pipeline/status/' + historyId,
     method: 'put'
   })
 } 

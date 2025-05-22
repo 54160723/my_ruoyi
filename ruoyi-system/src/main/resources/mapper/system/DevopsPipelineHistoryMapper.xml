@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DevopsPipelineHistoryMapper">
+    
+    <resultMap type="DevopsPipelineHistory" id="DevopsPipelineHistoryResult">
+        <result property="historyId"    column="history_id"    />
+        <result property="pipelineId"   column="pipeline_id"   />
+        <result property="jenkinsJob"   column="jenkins_job"   />
+        <result property="buildNumber"  column="build_number"  />
+        <result property="buildUrl"     column="build_url"     />
+        <result property="status"       column="status"        />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"      column="end_time"      />
+        <result property="duration"     column="duration"      />
+        <result property="triggerUser"  column="trigger_user"  />
+        <result property="parameters"   column="parameters"    />
+        <result property="createTime"   column="create_time"   />
+        <result property="updateTime"   column="update_time"   />
+        <result property="remark"       column="remark"        />
+    </resultMap>
+
+    <sql id="selectDevopsPipelineHistoryVo">
+        select history_id, pipeline_id, jenkins_job, build_number, build_url, status, start_time, end_time, duration, 
+        trigger_user, parameters, create_time, update_time, remark
+        from devops_pipeline_history
+    </sql>
+
+    <select id="selectDevopsPipelineHistoryList" parameterType="DevopsPipelineHistory" resultMap="DevopsPipelineHistoryResult">
+        <include refid="selectDevopsPipelineHistoryVo"/>
+        <where>  
+            <if test="pipelineId != null "> and pipeline_id = #{pipelineId}</if>
+            <if test="jenkinsJob != null  and jenkinsJob != ''"> and jenkins_job = #{jenkinsJob}</if>
+            <if test="buildNumber != null "> and build_number = #{buildNumber}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="triggerUser != null  and triggerUser != ''"> and trigger_user = #{triggerUser}</if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectDevopsPipelineHistoryByHistoryId" parameterType="Long" resultMap="DevopsPipelineHistoryResult">
+        <include refid="selectDevopsPipelineHistoryVo"/>
+        where history_id = #{historyId}
+    </select>
+        
+    <insert id="insertDevopsPipelineHistory" parameterType="DevopsPipelineHistory" useGeneratedKeys="true" keyProperty="historyId">
+        insert into devops_pipeline_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pipelineId != null">pipeline_id,</if>
+            <if test="jenkinsJob != null">jenkins_job,</if>
+            <if test="buildNumber != null">build_number,</if>
+            <if test="buildUrl != null">build_url,</if>
+            <if test="status != null">status,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="duration != null">duration,</if>
+            <if test="triggerUser != null">trigger_user,</if>
+            <if test="parameters != null">parameters,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pipelineId != null">#{pipelineId},</if>
+            <if test="jenkinsJob != null">#{jenkinsJob},</if>
+            <if test="buildNumber != null">#{buildNumber},</if>
+            <if test="buildUrl != null">#{buildUrl},</if>
+            <if test="status != null">#{status},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="duration != null">#{duration},</if>
+            <if test="triggerUser != null">#{triggerUser},</if>
+            <if test="parameters != null">#{parameters},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDevopsPipelineHistory" parameterType="DevopsPipelineHistory">
+        update devops_pipeline_history
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pipelineId != null">pipeline_id = #{pipelineId},</if>
+            <if test="jenkinsJob != null">jenkins_job = #{jenkinsJob},</if>
+            <if test="buildNumber != null">build_number = #{buildNumber},</if>
+            <if test="buildUrl != null">build_url = #{buildUrl},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="duration != null">duration = #{duration},</if>
+            <if test="triggerUser != null">trigger_user = #{triggerUser},</if>
+            <if test="parameters != null">parameters = #{parameters},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where history_id = #{historyId}
+    </update>
+
+    <delete id="deleteDevopsPipelineHistoryByHistoryId" parameterType="Long">
+        delete from devops_pipeline_history where history_id = #{historyId}
+    </delete>
+
+    <delete id="deleteDevopsPipelineHistoryByHistoryIds" parameterType="String">
+        delete from devops_pipeline_history where history_id in 
+        <foreach item="historyId" collection="array" open="(" separator="," close=")">
+            #{historyId}
+        </foreach>
+    </delete>
+</mapper> 

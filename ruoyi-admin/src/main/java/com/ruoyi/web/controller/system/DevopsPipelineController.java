@@ -17,6 +17,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.system.domain.DevopsPipeline;
+import com.ruoyi.system.domain.DevopsPipelineHistory;
 import com.ruoyi.system.service.IDevopsPipelineService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -104,11 +105,38 @@ public class DevopsPipelineController extends BaseController
     /**
      * 执行流水线
      */
-    @PreAuthorize("@ss.hasPermi('system:pipeline:execute')")
-    @Log(title = "流水线配置", businessType = BusinessType.UPDATE)
+    @PreAuthorize("@ss.hasPermi('system:devops:pipeline:execute')")
     @PutMapping("/execute/{pipelineId}")
-    public AjaxResult execute(@PathVariable("pipelineId") Long pipelineId)
-    {
-        return toAjax(devopsPipelineService.executePipeline(pipelineId));
+    public AjaxResult execute(@PathVariable("pipelineId") Long pipelineId) {
+        return toAjax(devopsPipelineService.triggerPipeline(pipelineId));
+    }
+
+    /**
+     * 查询流水线执行历史
+     */
+    @PreAuthorize("@ss.hasPermi('system:devops:pipeline:list')")
+    @GetMapping("/history")
+    public TableDataInfo history(DevopsPipelineHistory history) {
+        startPage();
+        List<DevopsPipelineHistory> list = devopsPipelineService.selectPipelineHistoryList(history);
+        return getDataTable(list);
+    }
+
+    /**
+     * 获取构建日志
+     */
+    @PreAuthorize("@ss.hasPermi('system:devops:pipeline:view')")
+    @GetMapping("/log/{historyId}")
+    public AjaxResult getBuildLog(@PathVariable("historyId") Long historyId) {
+        return success(devopsPipelineService.getBuildLog(historyId));
+    }
+
+    /**
+     * 刷新构建状态
+     */
+    @PreAuthorize("@ss.hasPermi('system:devops:pipeline:view')")
+    @PutMapping("/status/{historyId}")
+    public AjaxResult refreshStatus(@PathVariable("historyId") Long historyId) {
+        return toAjax(devopsPipelineService.refreshBuildStatus(historyId));
     }
 } 
